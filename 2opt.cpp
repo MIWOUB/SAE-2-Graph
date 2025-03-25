@@ -48,9 +48,6 @@ public:
     }
 };
 
-//Il me faut le cycle hamiltonien pour appliquer 2-opt
-
-
 void two_opt(Graph G, vector<int> &tour)
 {
 
