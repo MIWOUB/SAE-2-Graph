@@ -2,7 +2,7 @@
 
 Ce projet implémente un programme d'optimisation basé sur les algorithmes **2-opt** et **3-opt**, utilisés pour résoudre des problèmes d'optimisation combinatoire, comme le célèbre problème du voyageur de commerce (TSP - Travelling Salesman Problem).
 Dans cette SAE le problème posé est le suivant :
-190 restaurants dans la Nièvre, on cherche le plus court chemin pour tous les visiter.
+190 restaurants dans la Nièvre, on cherche le plus court chemin pour tous les visiter. Les restaurants sont représenter par des noeuds qui chacun ont leur coordonnées que nous devrons aller chercher dans un fichier texte.
 
 ## Fonctionnement
 
@@ -39,7 +39,22 @@ A → B → D → C → E.
 
 Ce simple échange peut réduire la distance totale si les nouvelles arêtes sont plus courtes.
 
-### Avantages
+### Pseudocode de l'algorithme 2-opt
+
+Voici le pseudocode de l'algorithme 2-opt pour mieux comprendre son fonctionnement :
+
+```
+Initialiser improved à vrai
+Tant que improved est vrai :
+   Mettre improved à faux
+   Pour chaque paire d'arêtes (i, j) dans tour :
+      Si inverser le segment [i, j] améliore la solution :
+         Inverser le segment [i, j]
+         Mettre improved à vrai
+Retourner le circuit optimisé
+```
+
+## Avantages
 
 - Simple à implémenter.
 - Rapide pour des solutions initiales de petite ou moyenne taille.
