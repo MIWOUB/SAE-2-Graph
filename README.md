@@ -1,47 +1,56 @@
-# SAE 2 Graph
+# SAE 2 – Optimisation de Graphe (TSP)
 
-Ce projet implémente un programme d'optimisation basé sur les algorithmes **2-opt** et **3-opt**, utilisés pour résoudre des problèmes d'optimisation combinatoire, comme le célèbre problème du voyageur de commerce (TSP - Travelling Salesman Problem).
-Dans cette SAE le problème posé est le suivant :
-190 restaurants dans la Nièvre, on cherche le plus court chemin pour tous les visiter. Les restaurants sont représenter par des noeuds qui chacun ont leur coordonnées que nous devrons aller chercher dans un fichier texte.
+Ce projet implémente un programme d'optimisation basé sur les algorithmes **2-opt** et **3-opt**, utilisés pour résoudre des problèmes d'optimisation combinatoire, comme le célèbre **problème du voyageur de commerce (TSP - Travelling Salesman Problem)**.
 
-## Fonctionnement
+### Problème posé  
+Dans cette SAE, le problème est le suivant :  
+> **190 restaurants** situés dans la **Nièvre** doivent être tous visités une seule fois, en suivant le **chemin le plus court possible**.  
+Les restaurants sont représentés par des **nœuds** ayant chacun leurs **coordonnées géographiques**, stockées dans un **fichier texte**.
 
-1. **Phase 1 : Optimisation 2-opt**  
-   Le programme commence par appliquer l'algorithme 2-opt pour améliorer une solution initiale. Cet algorithme consiste à échanger deux arêtes dans le chemin pour réduire la distance totale.
+---
 
-2. **Phase 2 : Optimisation 3-opt**  
-   Si l'algorithme 2-opt ne permet plus d'améliorer la solution, le programme passe à l'algorithme 3-opt. Celui-ci effectue des échanges impliquant trois arêtes pour explorer davantage de possibilités d'amélioration.
+##  Fonctionnement de l’algorithme
 
-3. **Phase 3 : Retour au 2-opt**  
-   Si le 3-opt trouve une meilleure solution, le programme revient à une phase de 2-opt pour affiner cette nouvelle solution.
+1. **Phase 1 – Optimisation 2-opt**  
+   Le programme commence par appliquer l’algorithme 2-opt pour améliorer une première solution (généralement aléatoire ou heuristique).
 
-## Détails de l'algorithme 2-opt
+2. **Phase 2 – Optimisation 3-opt**  
+   Lorsque 2-opt ne permet plus d’améliorer la solution, le programme utilise l’algorithme 3-opt, plus puissant, pour explorer davantage de combinaisons.
 
-L'algorithme 2-opt est une méthode d'optimisation locale utilisée pour améliorer une solution initiale au problème du voyageur de commerce. Son fonctionnement repose sur les étapes suivantes :
+3. **Phase 3 – Retour au 2-opt**  
+   Si 3-opt trouve une meilleure solution, une nouvelle phase de 2-opt est lancée pour affiner le chemin obtenu.
+
+---
+
+## Détails de l’algorithme 2-opt
+
+### Principe  
+Le 2-opt est un algorithme d'**optimisation locale**. Il améliore le chemin actuel en **échangeant deux arêtes**, si cela réduit la distance totale.
+
+### Étapes :
 
 1. **Initialisation**  
-   On part d'une solution initiale, qui peut être un chemin quelconque reliant tous les points (par exemple, un chemin généré aléatoirement ou une solution heuristique).
+   On part d’une solution initiale reliant tous les nœuds (par exemple un parcours généré aléatoirement).
 
-2. **Recherche d'améliorations**  
-   L'algorithme parcourt toutes les paires d'arêtes dans le chemin actuel. Pour chaque paire, il effectue un échange (ou "2-opt swap") en inversant l'ordre des nœuds entre ces deux arêtes.
+2. **Recherche d’améliorations**  
+   L’algorithme teste toutes les paires d’arêtes possibles. Pour chaque paire, il inverse l’ordre des nœuds entre ces deux arêtes (opération appelée "2-opt swap").
 
 3. **Évaluation**  
-   Après chaque échange, la nouvelle solution est évaluée en calculant la distance totale du chemin. Si la nouvelle solution est meilleure (distance plus courte), elle remplace la solution actuelle.
+   Si ce nouvel agencement réduit la distance totale du parcours, la solution est acceptée.
 
 4. **Itération**  
-   Ce processus est répété jusqu'à ce qu'aucune amélioration ne soit trouvée, c'est-à-dire que l'algorithme atteigne un minimum local.
+   Le processus continue jusqu’à ce qu’aucune amélioration ne soit trouvée : un **minimum local** est atteint.
 
-### Exemple d'un échange 2-opt
+### Exemple d’un échange 2-opt
 
-Supposons que le chemin actuel passe par les nœuds A → B → C → D → E.  
-Un échange 2-opt entre les arêtes (B → C) et (D → E) inversera l'ordre des nœuds entre ces deux arêtes, donnant le chemin :  
-A → B → D → C → E.
+Supposons un chemin :  
+**A → B → C → D → E**  
+Un échange entre les arêtes (B → C) et (D → E) donne :  
+**A → B → D → C → E**
 
-Ce simple échange peut réduire la distance totale si les nouvelles arêtes sont plus courtes.
+Cet échange peut réduire la distance totale si les nouvelles connexions sont plus courtes.
 
-### Pseudocode de l'algorithme 2-opt
-
-Voici le pseudocode de l'algorithme 2-opt pour mieux comprendre son fonctionnement :
+### Pseudocode
 
 ```
 Initialiser improved à vrai
@@ -54,25 +63,72 @@ Tant que improved est vrai :
 Retourner le circuit optimisé
 ```
 
-## Avantages
+---
 
-- Simple à implémenter.
-- Rapide pour des solutions initiales de petite ou moyenne taille.
-- Peut être combiné avec d'autres algorithmes, comme le 3-opt, pour explorer davantage de solutions.
+## 🔁 Détails de l’algorithme 3-opt
 
-Cependant, l'algorithme 2-opt peut être limité par les minima locaux, ce qui justifie l'utilisation de l'algorithme 3-opt pour une optimisation plus poussée.
+Le 3-opt est une extension du 2-opt. Il examine **trois arêtes** au lieu de deux, ce qui permet **plus de possibilités d’échange** et d’amélioration.
 
-## Objectif
+### Principe :  
+À chaque étape, le 3-opt teste plusieurs façons de reconnecter trois segments consécutifs du chemin, et conserve la meilleure configuration.
 
-L'objectif principal est de trouver une solution optimale ou quasi-optimale en combinant ces deux algorithmes de manière itérative et stratégique.
-
-## Applications
-
-Ce projet peut être utilisé pour résoudre des problèmes d'optimisation dans divers domaines, tels que :
-- La logistique (optimisation des itinéraires de livraison)
-- La planification (minimisation des coûts de déplacement)
-- Les réseaux (optimisation des chemins dans un graphe)
+Cela permet de dépasser certains **minima locaux** que le 2-opt ne peut pas franchir.
 
 ---
 
-Ce projet est une excellente opportunité pour explorer des algorithmes d'optimisation avancés et leur application dans des problèmes réels.
+##  Format des données
+
+Les coordonnées des restaurants sont extraites d’un fichier texte.  
+Chaque ligne correspond à un restaurant, par exemple :
+
+```
+NomRestaurant1 46.98765 3.12345
+NomRestaurant2 47.01234 3.10123
+...
+```
+
+- La première colonne est le nom.
+- La deuxième et troisième colonne sont les **coordonnées GPS** (latitude, longitude).
+- Ce fichier est chargé en mémoire pour créer une liste de nœuds avec leur position.
+
+---
+
+##  Avantages des algorithmes
+
+- **2-opt** :
+  - Simple à implémenter
+  - Rapide pour des graphes de taille moyenne
+  - Bonne base d’optimisation locale
+
+- **3-opt** :
+  - Meilleure exploration de l’espace des solutions
+  - Réduction des risques de rester bloqué dans un minimum local
+  - Combine bien avec le 2-opt pour une stratégie efficace
+
+---
+
+##  Objectif du projet
+
+> Trouver une **solution optimale ou quasi-optimale** en combinant les algorithmes 2-opt et 3-opt de manière itérative et intelligente.
+
+---
+
+##  Performances
+
+- Pour 190 restaurants, l’algorithme 2-opt converge généralement en **quelques secondes à quelques minutes** selon la machine.
+- Le 3-opt est plus lent mais plus précis.
+- Une bonne stratégie alterne les deux pour un compromis entre **temps d’exécution** et **qualité de la solution**.
+
+---
+
+##  Applications
+
+Ce projet a des applications concrètes dans plusieurs domaines :
+
+-  **Logistique** – Optimisation des tournées de livraison
+-  **Planification** – Réduction des trajets dans les plannings
+-  **Réseaux** – Calculs de plus courts chemins dans des graphes complexes
+
+---
+
+Ce projet est une **excellente opportunité d'apprendre des techniques d’optimisation puissantes**, avec des applications réelles dans l'industrie et la recherche.
