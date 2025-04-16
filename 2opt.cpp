@@ -88,3 +88,49 @@ void two_opt(Graph G, vector<int> &tour)
         }
     }
 }
+//des que improved = false passer sur un 3 opt puis repartir sur un 2 opt
+
+void three_opt(Graph G, vector<int> &tour)
+{
+    int n = tour.size(); // Nombre de sommets dans le circuit
+    bool improved = true; // Indicateur pour suivre si une amélioration a été effectuée
+
+    // Continuer à optimiser le circuit tant qu'il est possible d'améliorer
+    while (improved)
+    {
+        improved = false; // Réinitialiser l'indicateur d'amélioration
+
+        // Parcourir toutes les triplets d'arêtes dans le circuit
+        for (int i = 1; i < n - 2; i++)
+        {
+            for (int j = i + 1; j < n - 1; j++)
+            {
+                for (int k = j + 1; k < n; k++)
+                {
+                    // Calculer les gains pour les différentes réorganisations possibles des segments
+                    int gain1 = G.adj[tour[i - 1]][tour[i]].second + G.adj[tour[j]][tour[j + 1]].second + G.adj[tour[k]][tour[(k + 1) % n]].second;
+                    int gain2 = G.adj[tour[i - 1]][tour[j]].second + G.adj[tour[i]][tour[k]].second + G.adj[tour[j + 1]][tour[(k + 1) % n]].second;
+                    int gain3 = G.adj[tour[i - 1]][tour[j + 1]].second + G.adj[tour[k]][tour[i]].second + G.adj[tour[j]][tour[(k + 1) % n]].second;
+                    int gain4 = G.adj[tour[i - 1]][tour[k]].second + G.adj[tour[j + 1]][tour[i]].second + G.adj[tour[j]][tour[(k + 1) % n]].second;
+
+                    // Trouver la meilleure réorganisation
+                    if (gain2 > gain1)
+                    {
+                        reverse(tour.begin() + i, tour.begin() + j + 1);
+                        improved = true;
+                    }
+                    else if (gain3 > gain1)
+                    {
+                        reverse(tour.begin() + j + 1, tour.begin() + k + 1);
+                        improved = true;
+                    }
+                    else if (gain4 > gain1)
+                    {
+                        reverse(tour.begin() + i, tour.begin() + k + 1);
+                        improved = true;
+                    }
+                }
+            }
+        }
+    }
+}
