@@ -215,11 +215,11 @@ int main()
 }
 // Fonction principale pour tester l'algorithme 2-opt et 3-opt
 /**
- * @expected_output
+ * expected_output
  * Tour initial : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0
  * Tour optimisé : 0 1 3 5 7 9 11 10 8 6 4 2 0 19 18 17 16 15 14 13 12 0
  *
-* @note Le chemin optimisé peut varier en fonction des poids des arêtes et de l'implémentation
+ * Le chemin optimisé peut varier en fonction des poids des arêtes et de l'implémentation
  * des algorithmes 2-opt et 3-opt.
  */
 // Commande pour compiler : g++ -o 2opt 2opt.cpp
