@@ -54,80 +54,83 @@ public:
     }
 };
 
-// Fonction pour exécuter l'algorithme 2-opt afin d'optimiser un circuit donné
-void two_opt(Graph G, vector<int> &tour)
+
+// Fonction pour alterner le 2 opt et le 3 opt
+void two_three_opt(Graph G, vector<int> &tour)
 {
-    int n = tour.size(); // Nombre de sommets dans le circuit
     bool improved = true; // Indicateur pour suivre si une amélioration a été effectuée
 
-    // Continuer à optimiser le circuit tant qu'il est possible d'améliorer
+    // Continuer tant qu'il y a des améliorations
     while (improved)
     {
         improved = false; // Réinitialiser l'indicateur d'amélioration
 
-        // Parcourir toutes les paires d'arêtes dans le circuit
-        for (int i = 1; i < n - 1; i++)
+        // Exécuter le 2-opt
+        bool two_opt_improved = true;
+        while (two_opt_improved)
         {
-            for (int j = i + 1; j < n; j++)
+            two_opt_improved = false;
+
+            int n = tour.size();
+            for (int i = 1; i < n - 1; i++)
             {
-                // Ignorer le cas où inverser le segment reviendrait à inverser tout le circuit
-                if (j == n - 1 && i == 1)
-                    continue;
-
-                // Calculer le gain obtenu en inversant le segment [i, j]
-                int gain = G.adj[tour[i - 1]][tour[i]].second + G.adj[tour[j]][tour[(j + 1) % n]].second
-                         - G.adj[tour[i - 1]][tour[i]].second - G.adj[tour[j]][tour[(j + 1) % n]].second;
-
-                // Si le gain est positif, inverser le segment pour améliorer le circuit
-                if (gain > 0)
+                for (int j = i + 1; j < n; j++)
                 {
-                    reverse(tour.begin() + i, tour.begin() + j + 1); // Inverser le segment [i, j]
-                    improved = true; // Marquer qu'une amélioration a été effectuée
+                    if (j == n - 1 && i == 1)
+                        continue;
+
+                    int gain = G.adj[tour[i - 1]][tour[i]].second + G.adj[tour[j]][tour[(j + 1) % n]].second
+                             - G.adj[tour[i - 1]][tour[i]].second - G.adj[tour[j]][tour[(j + 1) % n]].second;
+
+                    if (gain > 0)
+                    {
+                        reverse(tour.begin() + i, tour.begin() + j + 1);
+                        two_opt_improved = true;
+                        improved = true;
+                    }
                 }
             }
         }
-    }
-}
-//des que improved = false passer sur un 3 opt puis repartir sur un 2 opt
 
-void three_opt(Graph G, vector<int> &tour)
-{
-    int n = tour.size(); // Nombre de sommets dans le circuit
-    bool improved = true; // Indicateur pour suivre si une amélioration a été effectuée
-
-    // Continuer à optimiser le circuit tant qu'il est possible d'améliorer
-    while (improved)
-    {
-        improved = false; // Réinitialiser l'indicateur d'amélioration
-
-        // Parcourir toutes les triplets d'arêtes dans le circuit
-        for (int i = 1; i < n - 2; i++)
+        // Si aucune amélioration avec 2-opt, passer au 3-opt
+        if (!improved)
         {
-            for (int j = i + 1; j < n - 1; j++)
+            bool three_opt_improved = true;
+            while (three_opt_improved)
             {
-                for (int k = j + 1; k < n; k++)
-                {
-                    // Calculer les gains pour les différentes réorganisations possibles des segments
-                    int gain1 = G.adj[tour[i - 1]][tour[i]].second + G.adj[tour[j]][tour[j + 1]].second + G.adj[tour[k]][tour[(k + 1) % n]].second;
-                    int gain2 = G.adj[tour[i - 1]][tour[j]].second + G.adj[tour[i]][tour[k]].second + G.adj[tour[j + 1]][tour[(k + 1) % n]].second;
-                    int gain3 = G.adj[tour[i - 1]][tour[j + 1]].second + G.adj[tour[k]][tour[i]].second + G.adj[tour[j]][tour[(k + 1) % n]].second;
-                    int gain4 = G.adj[tour[i - 1]][tour[k]].second + G.adj[tour[j + 1]][tour[i]].second + G.adj[tour[j]][tour[(k + 1) % n]].second;
+                three_opt_improved = false;
 
-                    // Trouver la meilleure réorganisation
-                    if (gain2 > gain1)
+                int n = tour.size();
+                for (int i = 1; i < n - 2; i++)
+                {
+                    for (int j = i + 1; j < n - 1; j++)
                     {
-                        reverse(tour.begin() + i, tour.begin() + j + 1);
-                        improved = true;
-                    }
-                    else if (gain3 > gain1)
-                    {
-                        reverse(tour.begin() + j + 1, tour.begin() + k + 1);
-                        improved = true;
-                    }
-                    else if (gain4 > gain1)
-                    {
-                        reverse(tour.begin() + i, tour.begin() + k + 1);
-                        improved = true;
+                        for (int k = j + 1; k < n; k++)
+                        {
+                            int gain1 = G.adj[tour[i - 1]][tour[i]].second + G.adj[tour[j]][tour[j + 1]].second + G.adj[tour[k]][tour[(k + 1) % n]].second;
+                            int gain2 = G.adj[tour[i - 1]][tour[j]].second + G.adj[tour[i]][tour[k]].second + G.adj[tour[j + 1]][tour[(k + 1) % n]].second;
+                            int gain3 = G.adj[tour[i - 1]][tour[j + 1]].second + G.adj[tour[k]][tour[i]].second + G.adj[tour[j]][tour[(k + 1) % n]].second;
+                            int gain4 = G.adj[tour[i - 1]][tour[k]].second + G.adj[tour[j + 1]][tour[i]].second + G.adj[tour[j]][tour[(k + 1) % n]].second;
+
+                            if (gain2 > gain1)
+                            {
+                                reverse(tour.begin() + i, tour.begin() + j + 1);
+                                three_opt_improved = true;
+                                improved = true;
+                            }
+                            else if (gain3 > gain1)
+                            {
+                                reverse(tour.begin() + j + 1, tour.begin() + k + 1);
+                                three_opt_improved = true;
+                                improved = true;
+                            }
+                            else if (gain4 > gain1)
+                            {
+                                reverse(tour.begin() + i, tour.begin() + k + 1);
+                                three_opt_improved = true;
+                                improved = true;
+                            }
+                        }
                     }
                 }
             }
