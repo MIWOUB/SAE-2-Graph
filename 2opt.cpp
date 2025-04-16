@@ -137,3 +137,81 @@ void two_three_opt(Graph G, vector<int> &tour)
         }
     }
 }
+
+
+int main()
+{
+    // Initialisation des paramètres du graphe
+    int V = 20; // Nombre de sommets
+    int E = 30; // Nombre d'arêtes
+
+    // Création du graphe
+    Graph G(V, E);
+
+    // Ajout des arêtes avec des poids aléatoires
+    G.addEdge(0, 1, 10);
+    G.addEdge(1, 2, 15);
+    G.addEdge(2, 3, 20);
+    G.addEdge(3, 4, 25);
+    G.addEdge(4, 5, 30);
+    G.addEdge(5, 6, 35);
+    G.addEdge(6, 7, 40);
+    G.addEdge(7, 8, 45);
+    G.addEdge(8, 9, 50);
+    G.addEdge(9, 10, 55);
+    G.addEdge(10, 11, 60);
+    G.addEdge(11, 12, 65);
+    G.addEdge(12, 13, 70);
+    G.addEdge(13, 14, 75);
+    G.addEdge(14, 15, 80);
+    G.addEdge(15, 16, 85);
+    G.addEdge(16, 17, 90);
+    G.addEdge(17, 18, 95);
+    G.addEdge(18, 19, 100);
+    G.addEdge(19, 0, 105);
+    G.addEdge(0, 2, 50);
+    G.addEdge(1, 3, 45);
+    G.addEdge(2, 4, 40);
+    G.addEdge(3, 5, 35);
+    G.addEdge(4, 6, 30);
+    G.addEdge(5, 7, 25);
+    G.addEdge(6, 8, 20);
+    G.addEdge(7, 9, 15);
+    G.addEdge(8, 10, 10);
+    G.addEdge(9, 11, 5);
+
+    // Affichage du graphe
+    G.printGraph();
+
+    // Initialisation d'un tour initial (cycle)
+    vector<int> tour = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0};
+
+    // Affichage du tour initial
+    cout << "Tour initial : ";
+    for (int node : tour)
+        cout << node << " ";
+    cout << endl;
+
+    // Application de l'algorithme 2-opt et 3-opt
+    two_three_opt(G, tour);
+
+    // Affichage du tour optimisé
+    cout << "Tour optimisé : ";
+    for (int node : tour)
+        cout << node << " ";
+    cout << endl;
+
+
+    return 0;
+}
+// Fonction principale pour tester l'algorithme 2-opt et 3-opt
+/**
+ * @expected_output
+ * Tour initial : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0
+ * Tour optimisé : 0 1 3 5 7 9 11 10 8 6 4 2 0 19 18 17 16 15 14 13 12 0
+ *
+* @note Le chemin optimisé peut varier en fonction des poids des arêtes et de l'implémentation
+ * des algorithmes 2-opt et 3-opt.
+ */
+// Commande pour compiler : g++ -o 2opt 2opt.cpp
+// Commande pour exécuter : ./2opt
