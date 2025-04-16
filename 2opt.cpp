@@ -6,6 +6,7 @@
 #include <functional>
 #include <algorithm>
 #include <utility>
+#include <chrono> // Ajouter cette bibliothèque pour mesurer le temps
 
 using namespace std;
 
@@ -192,8 +193,14 @@ int main()
         cout << node << " ";
     cout << endl;
 
+    // Mesure du temps d'exécution
+    auto start = chrono::high_resolution_clock::now(); // Début du timer
+
     // Application de l'algorithme 2-opt et 3-opt
     two_three_opt(G, tour);
+
+    auto end = chrono::high_resolution_clock::now(); // Fin du timer
+    auto duration = chrono::duration_cast<chrono::milliseconds>(end - start); // Calcul de la durée
 
     // Affichage du tour optimisé
     cout << "Tour optimisé : ";
@@ -201,6 +208,8 @@ int main()
         cout << node << " ";
     cout << endl;
 
+    // Affichage du temps d'exécution
+    cout << "Temps d'exécution : " << duration.count() << " ms" << endl;
 
     return 0;
 }
