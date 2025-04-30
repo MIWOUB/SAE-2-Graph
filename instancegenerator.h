@@ -1,0 +1,25 @@
+#ifndef INSTANCEGENERATOR_H
+#define INSTANCEGENERATOR_H
+
+#include <vector>
+#include <string>
+
+// Structure pour représenter un point
+struct Point {
+    double x, y;
+};
+
+// Classe pour générer des instances de graphes
+class InstanceGenerator {
+public:
+    // Génère un ensemble de points aléatoires
+    static std::vector<Point> generateRandomPoints(int numPoints, double minX, double maxX, double minY, double maxY);
+
+    // Sauvegarde les points dans un fichier
+    static void savePointsToFile(const std::vector<Point>& points, const std::string& filename);
+
+    // Charge les points depuis un fichier
+    static std::vector<Point> loadPointsFromFile(const std::string& filename);
+};
+
+#endif // INSTANCEGENERATOR_H
