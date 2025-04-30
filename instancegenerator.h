@@ -7,14 +7,14 @@
 // Structure pour représenter un point
 struct Point {
     int id;     // Identifiant unique du point
-    double x, y;
+    int x, y;   // Coordonnées en entiers
 };
 
 // Classe pour générer des instances de graphes
 class InstanceGenerator {
 public:
     // Génère un ensemble de points aléatoires
-    static std::vector<Point> generateRandomPoints(int numPoints, double minX, double maxX, double minY, double maxY);
+    static std::vector<Point> generateRandomPoints(int numPoints, int minX, int maxX, int minY, int maxY);
 
     // Sauvegarde les points dans un fichier
     static void savePointsToFile(const std::vector<Point>& points, const std::string& filename);

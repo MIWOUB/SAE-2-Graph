@@ -5,15 +5,25 @@
 using namespace std;
 
 int main() {
-    // Chargement des points depuis le fichier input.txt
-    vector<Point> points = InstanceGenerator::loadPointsFromFile("input.txt");
+    // Demander à l'utilisateur les paramètres pour générer les points
+    int numPoints;
+    double minCoord, maxCoord;
 
-    if (points.empty()) {
-        cerr << "Erreur : aucune coordonnée trouvée dans input.txt. Vérifiez que le fichier contient des points valides." << endl;
-        return 1;
-    }
+    cout << "Entrez le nombre de points à générer : ";
+    cin >> numPoints;
 
-    cout << "Points chargés depuis input.txt : " << points.size() << " points." << endl;
+    cout << "Entrez la coordonnée minimale : ";
+    cin >> minCoord;
+
+    cout << "Entrez la coordonnée maximale : ";
+    cin >> maxCoord;
+
+    // Générer les points aléatoires
+    vector<Point> points = InstanceGenerator::generateRandomPoints(numPoints, minCoord, maxCoord, minCoord, maxCoord);
+
+    // Sauvegarder les points générés dans input.txt
+    InstanceGenerator::savePointsToFile(points, "input.txt");
+    cout << "Points générés et sauvegardés dans input.txt." << endl;
 
     // Initialisation du chemin (ordre initial des points)
     vector<int> path(points.size());

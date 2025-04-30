@@ -23,8 +23,8 @@ vector<Point> generatePoints(int numPoints, int minCoord, int maxCoord) {
     int idCounter = 1; // Compteur pour les identifiants uniques
 
     while (points.size() < numPoints) {
-        double x = static_cast<double>(minCoord + rand() % (maxCoord - minCoord + 1));
-        double y = static_cast<double>(minCoord + rand() % (maxCoord - minCoord + 1));
+        int x = static_cast<int>(minCoord + rand() % (maxCoord - minCoord + 1));
+        int y = static_cast<int>(minCoord + rand() % (maxCoord - minCoord + 1));
         Point newPoint = {idCounter, x, y};
 
         // Vérifier si le point existe déjà
@@ -75,8 +75,7 @@ std::vector<Point> InstanceGenerator::loadPointsFromFile(const std::string& file
         return points;
     }
 
-    int id;
-    double x, y;
+    int id, x, y;
     while (inputFile >> id >> x >> y) {
         points.push_back({id, x, y});
     }
@@ -92,7 +91,20 @@ void InstanceGenerator::savePointsToFile(const std::vector<Point>& points, const
     }
 
     for (const auto& point : points) {
-        outputFile << point.x << " " << point.y << std::endl;
+        outputFile << point.id << " " << point.x << " " << point.y << std::endl;
     }
     outputFile.close();
+}
+
+std::vector<Point> InstanceGenerator::generateRandomPoints(int numPoints, int minX, int maxX, int minY, int maxY) {
+    std::vector<Point> points;
+    int idCounter = 1; // Identifiant unique pour chaque point
+
+    for (int i = 0; i < numPoints; ++i) {
+        int x = minX + rand() % (maxX - minX + 1);
+        int y = minY + rand() % (maxY - minY + 1);
+        points.push_back({idCounter++, x, y});
+    }
+
+    return points;
 }
