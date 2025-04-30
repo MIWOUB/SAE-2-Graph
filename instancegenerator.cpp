@@ -20,14 +20,17 @@ bool pointExists(const vector<Point>& points, const Point& p) {
 // Fonction pour générer des coordonnées aléatoires dans un intervalle donné
 vector<Point> generatePoints(int numPoints, int minCoord, int maxCoord) {
     vector<Point> points;
+    int idCounter = 1; // Compteur pour les identifiants uniques
+
     while (points.size() < numPoints) {
         double x = static_cast<double>(minCoord + rand() % (maxCoord - minCoord + 1));
         double y = static_cast<double>(minCoord + rand() % (maxCoord - minCoord + 1));
-        Point newPoint = {x, y};
+        Point newPoint = {idCounter, x, y};
 
         // Vérifier si le point existe déjà
         if (!pointExists(points, newPoint)) {
             points.push_back(newPoint);
+            ++idCounter; // Incrémenter l'identifiant pour le prochain point
         }
     }
     return points;
@@ -41,7 +44,7 @@ void writePointsToFile(const vector<Point>& points, const string& filename) {
         return;
     }
     for (const auto& point : points) {
-        file << point.x << " " << point.y << endl;
+        file << point.id << " " << point.x << " " << point.y << endl;
     }
     file.close();
     cout << "Fichier " << filename << " créé avec succès." << endl;
@@ -72,9 +75,10 @@ std::vector<Point> InstanceGenerator::loadPointsFromFile(const std::string& file
         return points;
     }
 
+    int id;
     double x, y;
-    while (inputFile >> x >> y) {
-        points.push_back({x, y});
+    while (inputFile >> id >> x >> y) {
+        points.push_back({id, x, y});
     }
     inputFile.close();
     return points;

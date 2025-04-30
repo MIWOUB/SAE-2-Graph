@@ -6,6 +6,7 @@
 
 // Structure pour représenter un point
 struct Point {
+    int id;     // Identifiant unique du point
     double x, y;
 };
 
