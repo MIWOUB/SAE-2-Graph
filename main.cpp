@@ -1,13 +1,21 @@
 #include <iostream>
+#include <locale>
+#include <codecvt>
+#include <windows.h> // Nécessaire pour SetConsoleOutputCP et SetConsoleCP
 #include "instancegenerator.h"
 #include "test_multi-opt.h"
 
 using namespace std;
 
 int main() {
+    // Configurer la console pour utiliser UTF-8
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    cout.imbue(locale("")); // Utiliser la locale par défaut pour gérer les caractères spéciaux
+
     // Demander à l'utilisateur les paramètres pour générer les points
     int numPoints;
-    double minCoord, maxCoord;
+    int minCoord, maxCoord;
 
     cout << "Entrez le nombre de points à générer : ";
     cin >> numPoints;
@@ -34,6 +42,10 @@ int main() {
     // Application de l'algorithme 2-opt
     int depth = 10; // Profondeur maximale
     twoOpt(points, path, depth);
+
+    // Calcul de la distance totale du chemin optimisé
+    double totalDistance = calculateCost(points, path);
+    cout << "Distance totale du chemin optimisé : " << totalDistance << endl;
 
     // Sauvegarde du chemin final dans output.txt
     vector<Point> optimizedPath;
