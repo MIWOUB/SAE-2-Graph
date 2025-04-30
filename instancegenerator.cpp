@@ -5,29 +5,27 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm> // Pour std::find_if
+#include "instancegenerator.h"
+#include <sstream>
 
 using namespace std;
 
-struct Point {
-    int x, y;
-};
-
-// Fonction pour verifier si un point existe dejà dans le vecteur
+// Fonction pour vérifier si un point existe déjà dans le vecteur
 bool pointExists(const vector<Point>& points, const Point& p) {
     return find_if(points.begin(), points.end(), [&p](const Point& existingPoint) {
         return existingPoint.x == p.x && existingPoint.y == p.y;
     }) != points.end();
 }
 
-// Fonction pour generer des coordonnees aleatoires dans un intervalle donne
+// Fonction pour générer des coordonnées aléatoires dans un intervalle donné
 vector<Point> generatePoints(int numPoints, int minCoord, int maxCoord) {
     vector<Point> points;
     while (points.size() < numPoints) {
-        int x = minCoord + rand() % (maxCoord - minCoord + 1);
-        int y = minCoord + rand() % (maxCoord - minCoord + 1);
+        double x = static_cast<double>(minCoord + rand() % (maxCoord - minCoord + 1));
+        double y = static_cast<double>(minCoord + rand() % (maxCoord - minCoord + 1));
         Point newPoint = {x, y};
 
-        // Verifier si le point existe dejà
+        // Vérifier si le point existe déjà
         if (!pointExists(points, newPoint)) {
             points.push_back(newPoint);
         }
@@ -35,18 +33,18 @@ vector<Point> generatePoints(int numPoints, int minCoord, int maxCoord) {
     return points;
 }
 
-// Fonction pour ecrire les points dans un fichier
+// Fonction pour écrire les points dans un fichier
 void writePointsToFile(const vector<Point>& points, const string& filename) {
     ofstream file(filename);
     if (!file) {
-        cerr << "Erreur : Impossible de creer le fichier " << filename << endl;
+        cerr << "Erreur : Impossible de créer le fichier " << filename << endl;
         return;
     }
     for (const auto& point : points) {
         file << point.x << " " << point.y << endl;
     }
     file.close();
-    cout << "Fichier " << filename << " cree avec succès." << endl;
+    cout << "Fichier " << filename << " créé avec succès." << endl;
 }
 
 // Fonction pour calculer la distance entre deux points
@@ -66,25 +64,31 @@ void calculateDistanceMatrix(const vector<Point>& points) {
     }
 }
 
-int main() {
-    srand(static_cast<unsigned>(time(0))); // Initialiser le generateur de nombres aleatoires
+std::vector<Point> InstanceGenerator::loadPointsFromFile(const std::string& filename) {
+    std::vector<Point> points;
+    std::ifstream inputFile(filename);
+    if (!inputFile.is_open()) {
+        std::cerr << "Erreur : impossible d'ouvrir le fichier " << filename << std::endl;
+        return points;
+    }
 
-    int numPoints, minCoord, maxCoord;
-    cout << "Entrez le nombre de sommets : ";
-    cin >> numPoints;
-    cout << "Entrez la coordonnee minimale : ";
-    cin >> minCoord;
-    cout << "Entrez la coordonnee maximale : ";
-    cin >> maxCoord;
+    double x, y;
+    while (inputFile >> x >> y) {
+        points.push_back({x, y});
+    }
+    inputFile.close();
+    return points;
+}
 
-    // Generer les points
-    vector<Point> points = generatePoints(numPoints, minCoord, maxCoord);
+void InstanceGenerator::savePointsToFile(const std::vector<Point>& points, const std::string& filename) {
+    std::ofstream outputFile(filename);
+    if (!outputFile.is_open()) {
+        std::cerr << "Erreur : impossible de créer le fichier " << filename << std::endl;
+        return;
+    }
 
-    // ecrire les points dans le fichier input.txt
-    writePointsToFile(points, "input.txt");
-
-    // Calculer et afficher la matrice des distances
-    calculateDistanceMatrix(points);
-
-    return 0;
+    for (const auto& point : points) {
+        outputFile << point.x << " " << point.y << std::endl;
+    }
+    outputFile.close();
 }
