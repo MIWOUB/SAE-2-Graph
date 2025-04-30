@@ -12,14 +12,14 @@ struct Point {
     int x, y;
 };
 
-// Fonction pour vérifier si un point existe déjà dans le vecteur
+// Fonction pour verifier si un point existe dejà dans le vecteur
 bool pointExists(const vector<Point>& points, const Point& p) {
     return find_if(points.begin(), points.end(), [&p](const Point& existingPoint) {
         return existingPoint.x == p.x && existingPoint.y == p.y;
     }) != points.end();
 }
 
-// Fonction pour générer des coordonnées aléatoires dans un intervalle donné
+// Fonction pour generer des coordonnees aleatoires dans un intervalle donne
 vector<Point> generatePoints(int numPoints, int minCoord, int maxCoord) {
     vector<Point> points;
     while (points.size() < numPoints) {
@@ -27,7 +27,7 @@ vector<Point> generatePoints(int numPoints, int minCoord, int maxCoord) {
         int y = minCoord + rand() % (maxCoord - minCoord + 1);
         Point newPoint = {x, y};
 
-        // Vérifier si le point existe déjà
+        // Verifier si le point existe dejà
         if (!pointExists(points, newPoint)) {
             points.push_back(newPoint);
         }
@@ -35,18 +35,18 @@ vector<Point> generatePoints(int numPoints, int minCoord, int maxCoord) {
     return points;
 }
 
-// Fonction pour écrire les points dans un fichier
+// Fonction pour ecrire les points dans un fichier
 void writePointsToFile(const vector<Point>& points, const string& filename) {
     ofstream file(filename);
     if (!file) {
-        cerr << "Erreur : Impossible de créer le fichier " << filename << endl;
+        cerr << "Erreur : Impossible de creer le fichier " << filename << endl;
         return;
     }
     for (const auto& point : points) {
         file << point.x << " " << point.y << endl;
     }
     file.close();
-    cout << "Fichier " << filename << " créé avec succès." << endl;
+    cout << "Fichier " << filename << " cree avec succès." << endl;
 }
 
 // Fonction pour calculer la distance entre deux points
@@ -67,20 +67,20 @@ void calculateDistanceMatrix(const vector<Point>& points) {
 }
 
 int main() {
-    srand(static_cast<unsigned>(time(0))); // Initialiser le générateur de nombres aléatoires
+    srand(static_cast<unsigned>(time(0))); // Initialiser le generateur de nombres aleatoires
 
     int numPoints, minCoord, maxCoord;
     cout << "Entrez le nombre de sommets : ";
     cin >> numPoints;
-    cout << "Entrez la coordonnée minimale : ";
+    cout << "Entrez la coordonnee minimale : ";
     cin >> minCoord;
-    cout << "Entrez la coordonnée maximale : ";
+    cout << "Entrez la coordonnee maximale : ";
     cin >> maxCoord;
 
-    // Générer les points
+    // Generer les points
     vector<Point> points = generatePoints(numPoints, minCoord, maxCoord);
 
-    // Écrire les points dans le fichier input.txt
+    // ecrire les points dans le fichier input.txt
     writePointsToFile(points, "input.txt");
 
     // Calculer et afficher la matrice des distances
