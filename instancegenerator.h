@@ -23,4 +23,9 @@ public:
     static std::vector<Point> loadPointsFromFile(const std::string& filename);
 };
 
+// Fonctions utilitaires
+double calculateDistance(const Point& a, const Point& b); // Calcul de la distance entre deux points
+void calculateDistanceMatrix(const std::vector<Point>& points); // Affiche la matrice des distances
+void copyFile(const std::string& source, const std::string& destination); // Copie un fichier
+
 #endif // INSTANCEGENERATOR_H

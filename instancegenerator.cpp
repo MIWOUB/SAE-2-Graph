@@ -108,3 +108,9 @@ std::vector<Point> InstanceGenerator::generateRandomPoints(int numPoints, int mi
 
     return points;
 }
+
+void copyFile(const string& source, const string& destination) {
+    ifstream src(source, ios::binary);
+    ofstream dest(destination, ios::binary);
+    dest << src.rdbuf();
+}
