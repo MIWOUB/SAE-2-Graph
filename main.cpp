@@ -5,6 +5,7 @@
 #include "instancegenerator.h"
 #include "test_multi-opt.h"
 #include <fstream> // Pour copier les fichiers
+#include <chrono> // Pour mesurer le temps
 
 using namespace std;
 
@@ -40,13 +41,22 @@ int main() {
         path[i] = static_cast<int>(i);
     }
 
+    // Mesurer le temps total pour trouver le meilleur chemin
+    auto totalStart = chrono::high_resolution_clock::now();
+
     // Demander à l'utilisateur la profondeur pour le 2-opt
     int depth;
     cout << "Entrez la profondeur maximale pour le 2-opt : ";
     cin >> depth;
 
     // Application initiale de l'algorithme 2-opt
+    auto twoOptStart = chrono::high_resolution_clock::now();
     twoOpt(points, path, depth);
+    auto twoOptEnd = chrono::high_resolution_clock::now();
+
+    // Calculer le temps pris par le 2-opt
+    auto twoOptDuration = chrono::duration_cast<chrono::milliseconds>(twoOptEnd - twoOptStart).count();
+    cout << "Temps pris par le 2-opt initial : " << twoOptDuration << " ms" << endl;
 
     // Calcul de la distance totale du chemin optimisé
     double initialDistance = calculateCost(points, path);
@@ -62,8 +72,14 @@ int main() {
 
     cout << "Chemin optimisé écrit dans output.txt" << endl;
 
+    // Initialiser un compteur pour le nombre d'exécutions de l'algorithme 2-opt
+    int executionCount = 0;
+
     // Boucle pour exécuter le 2-opt jusqu'à ce qu'il n'y ait plus d'amélioration
     while (true) {
+        // Incrémenter le compteur à chaque exécution
+        executionCount++;
+
         // Copier output.txt dans input.txt
         copyFile("output.txt", "input.txt");
 
@@ -77,7 +93,13 @@ int main() {
         }
 
         // Réappliquer le 2-opt
+        twoOptStart = chrono::high_resolution_clock::now();
         twoOpt(points, path, depth);
+        twoOptEnd = chrono::high_resolution_clock::now();
+
+        // Calculer le temps pris par le 2-opt
+        twoOptDuration = chrono::duration_cast<chrono::milliseconds>(twoOptEnd - twoOptStart).count();
+        cout << "Temps pris par le 2-opt : " << twoOptDuration << " ms" << endl;
 
         // Calculer la nouvelle distance
         double newDistance = calculateCost(points, path);
@@ -103,6 +125,14 @@ int main() {
 
         cout << "Chemin optimisé écrit dans output.txt" << endl;
     }
+
+    // Calculer le temps total pour trouver le meilleur chemin
+    auto totalEnd = chrono::high_resolution_clock::now();
+    auto totalDuration = chrono::duration_cast<chrono::milliseconds>(totalEnd - totalStart).count();
+    cout << "Temps total pour trouver le meilleur chemin : " << totalDuration / 1000.0 << " secondes" << endl;
+
+    // Afficher le nombre total d'exécutions de l'algorithme 2-opt
+    cout << "Nombre total d'exécutions de l'algorithme 2-opt : " << executionCount << endl;
 
     return 0;
 }
