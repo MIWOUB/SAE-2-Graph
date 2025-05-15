@@ -126,17 +126,6 @@ Chemin optimisé écrit dans output.txt
 
 ---
 
-## Applications
-
-Ce projet a des applications concrètes dans plusieurs domaines :
-
-- **Logistique** – Optimisation des tournées de livraison  
-- **Planification** – Réduction des trajets dans les plannings  
-- **Réseaux** – Calculs de plus courts chemins dans des graphes complexes
-
----
-
-Ce projet est une **excellente opportunité d'apprendre des techniques d’optimisation puissantes**, avec des applications réelles dans l'industrie et la recherche.
 
 ---
 
